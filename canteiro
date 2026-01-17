@@ -1,0 +1,106 @@
+# meu-canteiro
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Canteiro - To-Do List</title>
+    <style>
+        :root {
+            --pink: #ffb7b2; --green: #e2f0cb; --blue: #c7ceea;
+            --mint: #b5ead7; --cream: #fffaf0;
+        }
+
+        body {
+            background-color: var(--cream);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #6d8299;
+            margin: 0; display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
+        }
+
+        #start-screen { text-align: center; display: block; }
+        
+        h1 { color: var(--pink); font-size: 3rem; margin-bottom: 10px; }
+        
+        .intro-img { 
+            width: 250px; border-radius: 30px; border: 5px solid white; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05); margin-bottom: 20px;
+        }
+
+        .pixel-btn {
+            background-color: var(--blue); color: white; border: none;
+            padding: 15px 40px; font-size: 1.2rem; font-weight: bold;
+            border-radius: 10px; cursor: pointer;
+            box-shadow: 0 5px 0px #a4acc4; transition: 0.1s;
+        }
+        .pixel-btn:active { transform: translateY(3px); box-shadow: 0 2px 0px #a4acc4; }
+
+        #garden-screen {
+            display: none; width: 90%; max-width: 450px; background: white;
+            padding: 25px; border-radius: 30px; border: 3px dashed var(--mint);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .input-group { display: flex; gap: 10px; margin: 20px 0; }
+        input { flex: 1; padding: 10px; border: 2px solid var(--green); border-radius: 10px; outline: none; }
+        .add-btn { background: var(--green); border: none; padding: 10px; border-radius: 10px; cursor: pointer; }
+        
+        .task-list { list-style: none; padding: 0; text-align: left; }
+        .task-item { background: var(--cream); padding: 10px; border-radius: 10px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .completed { text-decoration: line-through; opacity: 0.5; }
+    </style>
+</head>
+<body>
+
+    <div id="start-screen">
+        <h1>Meu Canteiro</h1>
+        <img src="https://i.pinimg.com/564x/40/e3/37/40e3371f76e36d404b9016be49405230.jpg" alt="Capa" class="intro-img">
+        <br>
+        <button class="pixel-btn" onclick="startApp()">START</button>
+    </div>
+
+    <div id="garden-screen">
+        <h2 id="date" style="color:var(--pink); margin:0;"></h2>
+        <div style="background:#eee; height:10px; border-radius:10px; margin:15px 0;">
+            <div id="bar" style="background:var(--mint); width:0%; height:100%; border-radius:10px; transition:0.3s;"></div>
+        </div>
+        <div class="input-group">
+            <input type="text" id="taskInput" placeholder="Sua tarefa...">
+            <button class="add-btn" onclick="addTask()">🌱</button>
+        </div>
+        <ul id="taskList" class="task-list"></ul>
+    </div>
+
+    <script>
+        function startApp() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('garden-screen').style.display = 'block';
+            const now = new Date();
+            const days = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+            document.getElementById('date').innerText = days[now.getDay()];
+        }
+
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            if (!input.value) return;
+            const li = document.createElement('li');
+            li.className = 'task-item';
+            li.innerHTML = `<input type="checkbox" onchange="update()"> <span>${input.value}</span>`;
+            document.getElementById('taskList').appendChild(li);
+            input.value = "";
+            update();
+        }
+
+        function update() {
+            const boxes = document.querySelectorAll('input[type="checkbox"]');
+            let done = 0;
+            boxes.forEach(b => {
+                if(b.checked) { done++; b.nextElementSibling.classList.add('completed'); }
+                else { b.nextElementSibling.classList.remove('completed'); }
+            });
+            document.getElementById('bar').style.width = (boxes.length ? (done/boxes.length)*100 : 0) + "%";
+        }
+    </script>
+</body>
+</html>
