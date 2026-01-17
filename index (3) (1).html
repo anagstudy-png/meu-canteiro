@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Canteiro - To-Do List</title>
+    <style>
+        /* --- ESTILO GERAL --- */
+        :root {
+            --pink: #ffb7b2;
+            --green: #e2f0cb;
+            --blue: #c7ceea;
+            --mint: #b5ead7;
+            --cream: #fffaf0;
+        }
+
+        body {
+            background-color: var(--cream);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #6d8299;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- TELA 1: INÍCIO --- */
+        #start-screen {
+            text-align: center;
+            transition: opacity 0.5s ease;
+        }
+
+        h1 {
+            color: var(--pink);
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0px white;
+        }
+
+        .intro-img {
+            width: 250px;
+            border-radius: 30px;
+            border: 5px solid white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        /* Botão estilo Videogame */
+        .pixel-btn {
+            background-color: var(--blue);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 6px 0px #a4acc4; /* Efeito 3D */
+            transition: all 0.1s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .pixel-btn:active {
+            box-shadow: 0 2px 0px #a4acc4;
+            transform: translateY(4px);
+        }
+
+        /* --- TELA 2: O JARDIM (TO-DO) --- */
+        #garden-screen {
+            display: none; /* Escondido no início */
+            width: 90%;
+            max-width: 500px;
+            background: white;
+            padding: 30px;
+            border-radius: 40px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.05);
+            border: 4px dashed var(--mint);
+        }
+
+        .date-header {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .date-header h2 { color: var(--pink); margin: 0; }
+        .date-header p { margin: 5px 0; font-style: italic; }
+
+        /* Barra de Progressão */
+        .progress-container {
+            background: #eee;
+            border-radius: 20px;
+            height: 15px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        #progress-bar {
+            background: var(--mint);
+            width: 0%;
+            height: 100%;
+            transition: width 0.4s ease;
+        }
+
+        /* Input Area */
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--green);
+            border-radius: 15px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .add-btn {
+            background: var(--green);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        /* Lista de Tarefas */
+        .task-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .task-item {
+            background: var(--cream);
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: popIn 0.3s ease;
+        }
+
+        .task-item input[type="checkbox"] {
+            accent-color: var(--mint);
+            transform: scale(1.3);
+        }
+
+        .completed-text {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        /* Botão Finalizar */
+        .finish-btn {
+            background-color: var(--pink);
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(255, 183, 178, 0.4);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .flower-icon { font-size: 1.2rem; margin-right: 5px; }
+    </style>
+</head>
+<body>
+
+    <div id="start-screen">
+        <h1>Meu Canteiro</h1>
+        <img src="https://uploads.onecompiler.io/44asgabm3/44atrf5x5/%CA%9A%F0%9F%8D%99%C9%9E%20pinterest%20_%20@rosechu666.jpg" alt="Capa" class="intro-img">
+        <br>
+        <button class="pixel-btn" onclick="startApp()">START</button>
+    </div>
+
+    <div id="garden-screen">
+        <div class="date-header">
+            <h2 id="display-date">Segunda-feira</h2>
+            <p id="display-month">Janeiro, 2024</p>
+        </div>
+
+        <div class="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+
+        <div class="input-group">
+            <input type="text" id="taskInput" placeholder="Escreva sua tarefa aqui...">
+            <button class="add-btn" onclick="addTask()">🌱</button>
+        </div>
+
+        <ul class="task-list" id="taskList">
+            </ul>
+
+        <button class="finish-btn" onclick="finishDay()">Finalizar Dia ✨</button>
+    </div>
+
+    <script>
+        // Função para mudar de tela
+        function startApp() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('garden-screen').style.display = 'block';
+            updateDate();
+        }
+
+        // Atualizar Data Real
+        function updateDate() {
+            const now = new Date();
+            const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+            const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            
+            document.getElementById('display-date').innerText = days[now.getDay()];
+            document.getElementById('display-month').innerText = `${months[now.getMonth()]}, ${now.getFullYear()}`;
+        }
+
+        // Adicionar Tarefa
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            const taskText = input.value;
+            
+            if (taskText === "") return;
+
+            const li = document.createElement('li');
+            li.className = 'task-item';
+            li.innerHTML = `
+                <input type="checkbox" onchange="updateProgress()">
+                <span>${taskText}</span>
+            `;
+            
+            document.getElementById('taskList').appendChild(li);
+            input.value = "";
+            updateProgress();
+        }
+
+        // Barra de Progressão
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const total = checkboxes.length;
+            let checked = 0;
+
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    checked++;
+                    cb.nextElementSibling.classList.add('completed-text');
+                } else {
+                    cb.nextElementSibling.classList.remove('completed-text');
+                }
+            });
+
+            const percent = total === 0 ? 0 : (checked / total) * 100;
+            document.getElementById('progress-bar').style.width = percent + "%";
+        }
+
+        // Finalizar Dia
+        function finishDay() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            let todasFeitas = true;
+
+            checkboxes.forEach(cb => { if (!cb.checked) todasFeitas = false; });
+
+            if (checkboxes.length === 0) {
+                alert("O canteiro está vazio! Adicione tarefas primeiro. 🌱");
+            } else if (todasFeitas) {
+                alert("Parabéns! Você cuidou muito bem do seu jardim hoje. 🌸✨");
+            } else {
+                alert("Ainda restam flores para regar! Termine suas tarefas. 🌷");
+            }
+        }
+
+        // Atalho com a tecla Enter
+        document.getElementById('taskInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') addTask();
+        });
+    </script>
+</body>
+</html>
